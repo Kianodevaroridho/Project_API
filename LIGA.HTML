@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Klub Sepak Bola Eropa</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0e0e10;
+      color: #e2e8f0;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #38bdf8;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .filters {
+      text-align: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .filters button {
+      background: transparent;
+      border: 2px solid #38bdf8;
+      color: #38bdf8;
+      padding: 0.4rem 1rem;
+      font-weight: 600;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filters button.active,
+    .filters button:hover {
+      background: #38bdf8;
+      color: #000;
+    }
+
+    .clubCard {
+      background: #1e293b;
+      border-left: 5px solid #38bdf8;
+      margin-bottom: 1rem;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      transition: transform 0.2s ease;
+    }
+
+    .clubCard:hover {
+      transform: scale(1.01);
+    }
+
+    .clubName {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #f0fdfa;
+    }
+
+    .clubDetail {
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Klub Sepak Bola Eropa</h1>
+
+  <div class="filters">
+    <button class="filterBtn active" data-filter="all">Semua</button>
+    <button class="filterBtn" data-league="Premier League">Premier League</button>
+    <button class="filterBtn" data-league="La Liga">La Liga</button>
+    <button class="filterBtn" data-league="Serie A">Serie A</button>
+    <button class="filterBtn" data-league="Bundesliga">Bundesliga</button>
+    <button class="filterBtn" data-league="Ligue 1">Ligue 1</button>
+  </div>
+
+  <div class="filters">
+    <button class="filterBtn" data-country="Inggris">Inggris</button>
+    <button class="filterBtn" data-country="Spanyol">Spanyol</button>
+    <button class="filterBtn" data-country="Italia">Italia</button>
+    <button class="filterBtn" data-country="Jerman">Jerman</button>
+    <button class="filterBtn" data-country="Prancis">Prancis</button>
+    <button class="filterBtn" data-filter="all">Reset Filter</button>
+  </div>
+
+  <div id="clubList"></div>
+
+  <footer>© 2025 Data Klub Eropa </footer>
+
+  <script>
+    const clubs = [
+      { name: 'Manchester City', league: 'Premier League', country: 'Inggris' },
+      { name: 'Liverpool FC', league: 'Premier League', country: 'Inggris' },
+      { name: 'Real Madrid', league: 'La Liga', country: 'Spanyol' },
+      { name: 'Barcelona', league: 'La Liga', country: 'Spanyol' },
+      { name: 'AC Milan', league: 'Serie A', country: 'Italia' },
+      { name: 'Juventus', league: 'Serie A', country: 'Italia' },
+      { name: 'Bayern Munich', league: 'Bundesliga', country: 'Jerman' },
+      { name: 'Borussia Dortmund', league: 'Bundesliga', country: 'Jerman' },
+      { name: 'Paris Saint-Germain', league: 'Ligue 1', country: 'Prancis' },
+      { name: 'Olympique Marseille', league: 'Ligue 1', country: 'Prancis' },
+    ];
+
+    const clubList = document.getElementById('clubList');
+    const buttons = document.querySelectorAll('.filterBtn');
+
+    function renderClubs(filtered) {
+      clubList.innerHTML = filtered.map(club => `
+        <div class="clubCard">
+          <div class="clubName">${club.name}</div>
+          <div class="clubDetail">Kompetisi: ${club.league}</div>
+          <div class="clubDetail">Negara: ${club.country}</div>
+        </div>
+      `).join('');
+    }
+
+    function applyFilter(criteria) {
+      let filtered = clubs;
+      if (criteria.league) {
+        filtered = filtered.filter(c => c.league === criteria.league);
+      }
+      if (criteria.country) {
+        filtered = filtered.filter(c => c.country === criteria.country);
+      }
+      renderClubs(filtered);
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const league = btn.dataset.league || null;
+        const country = btn.dataset.country || null;
+        const isReset = btn.dataset.filter === 'all';
+        if (isReset) {
+          renderClubs(clubs);
+        } else {
+          applyFilter({ league, country });
+        }
+      });
+    });
+
+    renderClubs(clubs);
+  </script>
+</body>
+</html>
